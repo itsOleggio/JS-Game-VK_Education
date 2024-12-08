@@ -19,7 +19,12 @@ function createPlayer(playerClass, playerObj) {
     name.classList.add('name');
 
     name.textContent = playerObj.name;
-    life.style.width = playerObj.hp + '%';
+    if (playerObj.hp > 0) {
+        life.style.width = playerObj.hp + '%';
+    } else {
+        life.style.width = 0 + '%';
+    }
+    
 
     // Добавление в дочерний элемент character изображения img 
     const img = document.createElement('img');
