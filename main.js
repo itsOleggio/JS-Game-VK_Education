@@ -49,7 +49,6 @@ function changeHp(amount) {
     console.log(this.name, this.hp);
   }
 
-  
 
 function elHP() {
     return document.querySelector(`.${this.id === 1 ? "player1" : "player2"} .life`);
@@ -72,17 +71,17 @@ function renderHP() {
       console.log(winnerName + ' wins');
 
       
-    //   const $winTitle = document.createElement('div');
-    //   $winTitle.classList.add('winTitle');
-    //   $winTitle.textContent = `${winnerName} wins!`;
-    //   document.querySelector('.arenas').appendChild($winTitle);
+      const $winTitle = document.createElement('div');
+      $winTitle.classList.add('showResult');
+      $winTitle.textContent = `${winnerName} wins!`;
+      document.querySelector('.arenas').appendChild($winTitle);
     } else {
       console.log('DRAW');
 
-    //   const $drawTitle = document.createElement('div');
-    //   $drawTitle.classList.add('winTitle');
-    //   $drawTitle.textContent = 'DRAW!';
-    //   document.querySelector('.arenas').appendChild($drawTitle);
+      const $drawTitle = document.createElement('div');
+      $drawTitle.classList.add('showResult');
+      $drawTitle.textContent = 'DRAW!';
+      document.querySelector('.arenas').appendChild($drawTitle);
     }
   
     createReloadButton(); // Создаём кнопку перезапуска игры
@@ -109,7 +108,18 @@ function createReloadButton() {
 
     }
 
-    
+    function enemyAttack() {
+        const hit = ATTACK[getRandom(3) - 1];       
+        const defence = ATTACK[getRandom(3) - 1];   
+      
+        return {
+          value: HIT[hit],  
+          hit,              
+          defence           
+        };
+      }
+      
+
 
 const player1 = {
   id: 1,
@@ -139,6 +149,8 @@ const player2 = {
   renderHP,
 };
 
+const $randomButton = document.getElementById("Fight_Button");
+
 createPlayer("player1", player1);
 createPlayer("player2", player2);
 
@@ -151,24 +163,90 @@ const HIT = {
 const ATTACK = ["head", "body", "foot"];
   
 
-const $randomButton = document.getElementById("randomButton");
-$randomButton.addEventListener("click", function () {
+const $form = document.querySelector('.control');
 
-    player1.changeHp(getRandom(20));
-    player2.changeHp(getRandom(20));
-    
+$form.addEventListener('submit', function (event) {
+    event.preventDefault();
+  
+    if ($randomButton.disabled) {
+      return;
+    }
+  
+    let hitValue = '';
+    let defenceValue = '';
+  
+    for (const radio of $form.querySelectorAll('input[type="radio"]')) {
+      if (radio.checked) {
+        if (radio.name === 'hit') {
+          hitValue = radio.value;
+        }
+        if (radio.name === 'defence') {
+          defenceValue = radio.value;
+        }
+      }
+    }
+  
+    const playerChoice = {
+      value: HIT[hitValue],
+      hit: hitValue,
+      defence: defenceValue,
+    };
+  
+    console.log(playerChoice);
+  
+    const enemy = enemyAttack();
+    console.log(`Enemy Hit: ${enemy.hit}, Enemy Defence: ${enemy.defence}`);
+  
+    const player1Damage = HIT[playerChoice.hit];
+    const player2Defence = HIT[enemy.defence];
+  
+    if (player1Damage > player2Defence) {
+      player2.changeHp(player1Damage - player2Defence);
+    }
+  
+    const player2Damage = enemy.value;
+    const player1Defence = HIT[playerChoice.defence];
+  
+    if (player2Damage > player1Defence) {
+      player1.changeHp(player2Damage - player1Defence);
+    }
+  
     player1.renderHP();
     player2.renderHP();
-
+  
     if (player1.hp <= 0 && player2.hp <= 0) {
-        $randomButton.disabled = true;
-        showWinner(null);
-      } else if (player1.hp <= 0) {
-        $randomButton.disabled = true;
-        showWinner(player2.name);
-      } else if (player2.hp <= 0) {
-        $randomButton.disabled = true;
-        showWinner(player1.name);
-      }
+      showWinner(null);
+      $form.removeEventListener('submit', arguments.callee);
+    } else if (player1.hp <= 0) {
+      showWinner(player2.name);
+      $form.removeEventListener('submit', arguments.callee);
+    } else if (player2.hp <= 0) {
+      showWinner(player1.name);
+      $form.removeEventListener('submit', arguments.callee);
+    }
+  });
+  
 
-});
+  
+
+// const $randomButton = document.getElementById("randomButton");
+// $randomButton.addEventListener("click", function () {
+
+//     player1.changeHp(getRandom(20));
+//     player2.changeHp(getRandom(20));
+    
+//     player1.renderHP();
+//     player2.renderHP();
+
+//     if (player1.hp <= 0 && player2.hp <= 0) {
+//         $randomButton.disabled = true;
+//         showWinner(null);
+//       } else if (player1.hp <= 0) {
+//         $randomButton.disabled = true;
+//         showWinner(player2.name);
+//       } else if (player2.hp <= 0) {
+//         $randomButton.disabled = true;
+//         showWinner(player1.name);
+//       }
+
+// });
