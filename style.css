@@ -279,7 +279,7 @@ body {
     top: 4px;
 }
 
-.showResult {
+.loseTitle {
     position: absolute;
     top: 22%;
     left: 50%;
@@ -361,6 +361,19 @@ form:invalid button[class=button]:active::after {
     display: flex;
     justify-content: space-between;
     color: #efefef;
+}
+
+.showResult {
+    position: absolute;
+    top: 22%;
+    left: 50%;
+    font-size: 36px;
+    transform: translate(-50%, 0%);
+    text-transform: uppercase;
+    z-index: 1000;
+    color: white;
+    font-family: "Mortal Kombat 3";
+    text-shadow: 2px 2px 2px #cd0e03;
 }
 .ul label {
     cursor: pointer;
