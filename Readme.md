@@ -4,7 +4,7 @@
 
 Проект не использует фреймворки и сторонние зависимости: только HTML, CSS и JavaScript (ES-модули).
 
-[Открыть демо на GitHub Pages](https://itsoleggio.github.io/JS-Game-VK_Education/)
+**[Открыть демо на GitHub Pages](https://itsoleggio.github.io/JS-Game-VK_Education/)**
 
 ## Запуск
 
